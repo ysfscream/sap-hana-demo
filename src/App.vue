@@ -13,7 +13,7 @@
         active-text-color="#FE9E00">
         <el-menu-item index="2">
           <i class="el-icon-menu"></i>
-          <template #title>监控管理</template>
+          <template #title>OVERVIEW</template>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -21,9 +21,14 @@
     <el-container>
       <el-header style="height: 60px;">
         <div class="header-tabs">
-          <a href="javascript:;" class="active">厂区数据</a>
-          <a href="javascript:;">设备管理</a>
-          <a href="javascript:;">告警管理</a>
+          <a href="javascript:;" @click="routerView('/factories')" :class="{ active: currentPath === 'Factories' }">厂区数据</a>
+          <a
+            href="javascript:;"
+            @click="routerView('/devices')"
+            :class="{ active: currentPath === 'Devices' || currentPath === 'DeviceDetail' }">
+            设备管理
+          </a>
+          <a href="javascript:;" @click="routerView('/alerts')" :class="{ active: currentPath === 'Alerts' }">告警管理</a>
         </div>
       </el-header>
       <el-main>
@@ -34,15 +39,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, defineComponent } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
-  setup(props, ctx) {
-    console.log(ctx)
-    const router = useRoute()
-    console.log(router.path)
+  setup() {
+    const router = useRouter()
+    const routerView = (path: string) => {
+      router.push(path)
+    }
+    const currentPath = computed(() => {
+      return router.currentRoute.value.name
+    })
+    return {
+      currentPath,
+      routerView,
+    }
   },
 })
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="factories">
-    <el-row :gutter="20">
+    <el-row :gutter="40">
       <el-col :span="14">
         <h3>厂区列表</h3>
         <el-row style="margin-top: 40px;" :gutter="40">
@@ -111,12 +111,6 @@ export default defineComponent({
     margin-right: 20px;
   }
   .el-card {
-    cursor: pointer;
-    background: #0B0F12;
-    border: 1px solid #2f363a;
-    border-radius: 0px;
-    margin-bottom: 40px;
-    color: #fff;
     .card-item {
       label {
         color: #848383;

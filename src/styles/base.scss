@@ -14,5 +14,40 @@ p {
 }
 
 a {
+  color: #FE9E00;
   text-decoration: none;
+}
+
+.el-card {
+  cursor: pointer;
+  background: #0B0F12;
+  border: 1px solid #2f363a;
+  border-radius: 0px;
+  margin-bottom: 40px;
+  color: #fff;
+}
+.el-table {
+  color: #fff;
+}
+.el-table th {
+  background-color: #2f363a;
+}
+.el-table tr {
+  background-color: #0B0F12;
+}
+.el-table td, .el-table th.is-leaf {
+  border-bottom: 1px solid #2f363a;
+}
+.el-table--border::after, .el-table--group::after, .el-table::before {
+  background-color: #2f363a;
+}
+.el-table--enable-row-hover .el-table__body tr:hover>td,
+.el-table__fixed-right::before, .el-table__fixed::before {
+  background-color: #2f363a;
+}
+.el-table__body tr.hover-row.current-row>td,
+.el-table__body tr.hover-row.el-table__row--striped.current-row>td,
+.el-table__body tr.hover-row.el-table__row--striped>td,
+.el-table__body tr.hover-row>td {
+  background-color: #2f363a;
 }
