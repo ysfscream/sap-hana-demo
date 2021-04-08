@@ -4,6 +4,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/factories',
+  },
+  {
+    path: '/factories',
     name: 'Factories',
     component: () => import('../views/Factories.vue'),
   },

@@ -1,13 +1,131 @@
 <template>
-  <div class="factories"></div>
+  <div class="factories">
+    <el-row :gutter="20">
+      <el-col :span="14">
+        <h3>厂区列表</h3>
+        <el-row style="margin-top: 40px;" :gutter="40">
+          <el-col v-for="(fac, index) in facData" :key="index" :span="12">
+            <el-card>
+              <div class="image">
+                <img src="../assets/module.png" alt="" width="48">
+              </div>
+              <div class="card-item">
+                <label>厂区名称：</label>
+                <span>{{ fac.NAME }}</span>
+              </div>
+              <div class="card-item">
+                <label>厂区信息：</label>
+                <span>{{ fac.INFO }}</span>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="10">
+        <h3>厂区分布</h3>
+        <el-row style="margin-top: 40px;">
+          <el-card>
+            <div id="fac" style="width: 400px; height: 400px;"></div>
+          </el-card>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { computed, defineComponent, onMounted } from "@vue/runtime-core";
+import data from '../assets/factories.json'
+import * as echarts from 'echarts'
 
 export default defineComponent({
   name: 'Factories',
   setup() {
+    const facData = computed(() => {
+      return data
+    })
+     //methods
+    	const echartInit = () =>{
+        const mainDom = document.getElementById('fac')
+        if (!mainDom) {
+          return
+        }
+        const myChart = echarts.init(mainDom, 'dark')
+        const option = {
+          title: {
+            text: '厂区分布',
+            left: 'center'
+          },
+          backgroundColor: '#0B0F12',
+          color: [
+            '#FE9E00',
+            '#00DED8',
+          ],
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+          },
+          series: [
+            {
+              name: '访问来源',
+              type: 'pie',
+              radius: '50%',
+              data: [
+                  {value: 2, name: '东部厂房'},
+                  {value: 1, name: '西部厂房'},
+                  {value: 1, name: '南部厂房'},
+                  {value: 1, name: '北部厂房'},
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        }
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+    //onMounted
+    onMounted(()=>{
+      echartInit()
+    })
+    return {
+      facData,
+      echartInit,
+    }
   },
 })
 </script>
+
+<style lang="scss">
+.factories {
+  .image {
+    float: left;
+    margin-right: 20px;
+  }
+  .el-card {
+    cursor: pointer;
+    background: #0B0F12;
+    border: 1px solid #2f363a;
+    border-radius: 0px;
+    margin-bottom: 40px;
+    color: #fff;
+    .card-item {
+      label {
+        color: #848383;
+      }
+      margin-bottom: 20px;
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+</style>

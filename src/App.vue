@@ -19,7 +19,13 @@
     </el-aside>
 
     <el-container>
-      <el-header style="height: 80px;"></el-header>
+      <el-header style="height: 60px;">
+        <div class="header-tabs">
+          <a href="javascript:;" class="active">厂区数据</a>
+          <a href="javascript:;">设备管理</a>
+          <a href="javascript:;">告警管理</a>
+        </div>
+      </el-header>
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -29,10 +35,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
-  setup() {},
+  setup(props, ctx) {
+    console.log(ctx)
+    const router = useRoute()
+    console.log(router.path)
+  },
 })
 </script>
 
@@ -44,13 +55,15 @@ export default defineComponent({
 }
 .el-header {
   color: #333;
-  line-height: 80px;
+  line-height: 60px;
   margin-left: 200px;
   border-bottom: 1px solid #2f363a;
+  padding: 0 32px !important;
 }
 .el-main {
   margin: 0 32px 0 232px;
-  padding: 60px 0 20px;
+  padding: 40px 0 !important;
+  font-size: 14px;
 }
 .el-icon-menu {
   position: relative;
@@ -75,5 +88,16 @@ export default defineComponent({
   overflow-x: hidden;
   padding-bottom: 45px;
   box-shadow: 0 0 15px #0b0b0b;
+}
+.header-tabs {
+  a {
+    color: #848383;
+    margin-right: 48px;
+    padding-bottom: 17px;
+    &.active {
+      color: #fff;
+      border-bottom: 1px solid #FE9E00;
+    }
+  }
 }
 </style>
