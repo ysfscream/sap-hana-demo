@@ -35,15 +35,15 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted } from "@vue/runtime-core";
-import data from '../assets/factories.json'
+import Factories from '../assets/factories.json'
 import * as echarts from 'echarts'
-import { useRouter } from "vue-router";
+import { useRouter } from "vue-router"
 
 export default defineComponent({
   name: 'Factories',
   setup() {
     const facData = computed(() => {
-      return data
+      return Factories
     })
     const echartInit = () =>{
       const mainDom = document.getElementById('fac')
@@ -53,16 +53,22 @@ export default defineComponent({
       const myChart = echarts.init(mainDom, 'dark')
       const option = {
         title: {
-          text: '厂区分布',
+          text: '厂区能耗分布',
           left: 'center'
         },
         backgroundColor: '#0B0F12',
         color: [
           '#FE9E00',
           '#00DED8',
+          '#ee6666',
+          '#9a60b4',
+          '#73c0de',
         ],
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          formatter: (val: any) => {
+            return `${val.data.value}%`
+          }
         },
         legend: {
           orient: 'vertical',
@@ -70,14 +76,14 @@ export default defineComponent({
         },
         series: [
           {
-            name: '',
             type: 'pie',
             radius: '50%',
             data: [
-                {value: 2, name: '东部厂房'},
-                {value: 1, name: '西部厂房'},
-                {value: 1, name: '南部厂房'},
-                {value: 1, name: '北部厂房'},
+              {value: 20, name: '东部厂房-1'},
+              {value: 30, name: '东部厂房-2'},
+              {value: 10, name: '西部厂房'},
+              {value: 20, name: '南部厂房'},
+              {value: 50, name: '北部厂房'},
             ],
             emphasis: {
               itemStyle: {
@@ -90,14 +96,14 @@ export default defineComponent({
         ]
       }
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
+      myChart.setOption(option)
     }
     //onMounted
     onMounted(()=>{
       echartInit()
     })
     const router = useRouter()
-    const viewDevives = ({ NAME }: typeof data[0]) => {
+    const viewDevives = ({ NAME }: typeof Factories[0]) => {
       router.push({
         path: '/devices',
         query: {

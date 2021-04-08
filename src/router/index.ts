@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'DeviceDetail',
     component: () => import('../views/DeviceDetail.vue'),
   },
+  {
+    path: '/alerts',
+    name: 'Alerts',
+    component: () => import('../views/Alerts.vue'),
+  },
 ]
 const router = createRouter({
   history: createWebHistory(''),
