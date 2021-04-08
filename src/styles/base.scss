@@ -26,6 +26,12 @@ a {
   margin-bottom: 40px;
   color: #fff;
 }
+.el-card__header {
+  border-bottom: 1px solid #2f363a;
+}
+.card-header {
+  position: relative;
+}
 .el-table {
   color: #fff;
 }
@@ -50,4 +56,48 @@ a {
 .el-table__body tr.hover-row.el-table__row--striped>td,
 .el-table__body tr.hover-row>td {
   background-color: #2f363a;
+}
+@keyframes scaleAnimate {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.running {
+  position: absolute;
+  display: inline;
+  top: -24px;
+  left: -42px;
+}
+
+.running-icon {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #00b17350;
+  animation: scaleAnimate 1.5s ease-out infinite;
+}
+
+.running-icon-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #00b173;
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  z-index: 3;
 }

@@ -39,17 +39,21 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineComponent, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import devices from '../assets/devices.json'
 
 export default defineComponent({
   name: 'Devices',
   setup() {
-    const tableData = computed(() => {
-      return devices
-    })
+    const tableData = ref(devices)
     const router = useRouter()
+    const route = useRoute()
+    const { area } = route.query
+    if (area) {
+      const findData = devices.filter((device) => device.AREA === area)
+      tableData.value = findData
+    }
     const viewDevice = ({ ID }: typeof devices[0]) => {
       router.push(`/devices/${ID}`)
     }
