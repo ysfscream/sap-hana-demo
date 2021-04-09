@@ -33,8 +33,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted } from "@vue/runtime-core";
+<script>
+import { computed, defineComponent, onMounted } from 'vue'
 import Factories from '../assets/factories.json'
 import * as echarts from 'echarts'
 import { useRouter } from "vue-router"
@@ -66,7 +66,7 @@ export default defineComponent({
         ],
         tooltip: {
           trigger: 'item',
-          formatter: (val: any) => {
+          formatter: (val) => {
             return `${val.data.value}%`
           }
         },
@@ -103,7 +103,7 @@ export default defineComponent({
       echartInit()
     })
     const router = useRouter()
-    const viewDevives = ({ NAME }: typeof Factories[0]) => {
+    const viewDevives = ({ NAME }) => {
       router.push({
         path: '/devices',
         query: {

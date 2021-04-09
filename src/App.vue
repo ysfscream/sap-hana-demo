@@ -32,21 +32,21 @@
         </div>
       </el-header>
       <el-main>
-        <router-view></router-view>
+        <Router-view/>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
-<script lang="ts">
+<script>
 import { computed, defineComponent } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
   setup() {
     const router = useRouter()
-    const routerView = (path: string) => {
+    const routerView = (path) => {
       router.push(path)
     }
     const currentPath = computed(() => {

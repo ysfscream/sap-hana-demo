@@ -42,16 +42,27 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue'
-import Alerts from '../assets/alerts.json'
+<script>
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'Alerts',
   setup() {
-    const tableData = computed(() => {
-      return Alerts
+    const tableData = ref([])
+    const timer = ref(0)
+    const loadData = () => {
+      axios.get('/api/events').then((res) => {
+        tableData.value = res.data
+      })
+    }
+    loadData()
+    timer.value = setInterval(() => {
+      loadData()
+    }, 2000)
+    onUnmounted(() => {
+      clearInterval(timer.value)
     })
     const echartInit = () =>{
       const mainDom = document.getElementById('alerts')
@@ -73,7 +84,7 @@ export default defineComponent({
             min: 80,
             max: 600,
             inRange: {
-                colorLightness: [0, 1]
+              colorLightness: [0, 1]
             }
         },
         series: [

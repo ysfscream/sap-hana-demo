@@ -68,17 +68,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+<script>
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import * as echarts from 'echarts'
 import devices from '../assets/devices.json'
 import AMapLoader from '@amap/amap-jsapi-loader'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'Devices',
   setup() {
-    let device: any = ref({})
+    const device = ref({})
+    const myChart = ref(null)
+    const currentData = ref(0)
+    const timer = ref(0)
     const deviceTypeMap = {
       1: '电表',
       2: '水表',
@@ -91,18 +95,23 @@ export default defineComponent({
     const route = useRoute()
     const loadData = () => {
       const { id } = route.params
-      const _id = parseInt(id as string, 10)
+      const _id = parseInt(id, 10)
       const findData = tableData.value.find((item) => item.ID === _id)
       if (findData) {
         device.value = findData
       }
+      axios.get('/api/current').then((res) => {
+        const data = res.data
+        const len = data[_id].length
+        currentData.value = data[_id][len -1]
+      })
     }
     const currentDataInit = () =>{
       const mainDom = document.getElementById('current')
       if (!mainDom) {
         return
       }
-      const myChart = echarts.init(mainDom, 'dark')
+      myChart.value = echarts.init(mainDom, 'dark')
       const option = {
         backgroundColor: '#0B0F12',
         series: [
@@ -112,7 +121,7 @@ export default defineComponent({
             startAngle: 200,
             endAngle: -20,
             min: 0,
-            max: 60,
+            max: 300,
             splitNumber: 12,
             itemStyle: {
               color: '#FFAB91',
@@ -169,7 +178,7 @@ export default defineComponent({
             },
             data: [
               {
-                value: 20,
+                value: 0,
               },
             ],
           },
@@ -180,7 +189,7 @@ export default defineComponent({
             startAngle: 200,
             endAngle: -20,
             min: 0,
-            max: 60,
+            max: 300,
             itemStyle: {
               color: '#FD7347',
             },
@@ -209,14 +218,35 @@ export default defineComponent({
             },
             data: [
               {
-                value: 20,
+                value: 0,
               },
             ],
           },
         ],
       }
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option)
+      myChart.value.setOption(option)
+      const setData = () => {
+        const { id } = route.params
+        const _id = parseInt(id, 10)
+        const findData = tableData.value.find((item) => item.ID === _id)
+        if (findData) {
+          device.value = findData
+        }
+        axios.get('/api/current').then((res) => {
+          const data = res.data
+          const len = data[_id].length
+          currentData.value = data[_id][len -1]
+          option.series[0].data[0].value = currentData.value
+          option.series[1].data[0].value = currentData.value
+          option.series
+          myChart.value.setOption(option, true)
+        })
+      }
+      setData()
+      timer.value = setInterval(() => {
+        setData()
+      }, 2000)
     }
     const historyDataInit = () =>{
       const mainDom = document.getElementById('history')
@@ -299,9 +329,12 @@ export default defineComponent({
         console.log(e)
       })
     onMounted(() => {
-      loadData()
       currentDataInit()
       historyDataInit()
+      loadData()
+    })
+    onUnmounted(() => {
+      clearInterval(timer.value)
     })
     const center = { lat: 40.689247, lng: -74.044502 }
 
@@ -322,18 +355,18 @@ export default defineComponent({
       padding: 0px;
     }
   }
-  .device-card .el-card {
-    border: none;
-    border-bottom: 1px solid #2f363a;
-    .el-card__body {
-      padding: 20px 0;
-      .card-item {
-        margin-bottom: 20px;
-      }
-      label {
-        color: #848383;
-        margin-right: 80px;
-      }
+}
+.device-card.el-card {
+  border: none;
+  border-bottom: 1px solid #2f363a;
+  .el-card__body {
+    padding: 20px 0;
+    .card-item {
+      margin-bottom: 20px;
+    }
+    label {
+      color: #848383;
+      margin-right: 80px;
     }
   }
 }

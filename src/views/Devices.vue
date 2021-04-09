@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import devices from '../assets/devices.json'
@@ -54,7 +54,7 @@ export default defineComponent({
       const findData = devices.filter((device) => device.AREA === area)
       tableData.value = findData
     }
-    const viewDevice = ({ ID }: typeof devices[0]) => {
+    const viewDevice = ({ ID }) => {
       router.push(`/devices/${ID}`)
     }
     return {
